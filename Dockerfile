@@ -35,6 +35,15 @@ RUN ./configure --prefix=/opt/riscv32 --with-arch=rv32i --with-abi=ilp32 && \
 # 環境変数を設定して、ツールチェーンが見つかるようにする
 ENV PATH="/opt/riscv32/bin:${PATH}"
 
+# Rust
+RUN apt install -y cargo
+RUN curl https://sh.rustup.rs -sSf | sh && \
+    source "$HOME/.cargo/env" && \
+    rustup default nightly && \
+    rustup target add riscv32imac-unknown-none-elf && \
+    cargo install cargo-binutils && \
+    rustup component add llvm-tools-preview
+
 RUN mkdir -p work && \
     cd work && \
     curl -LO https://github.com/qemu/qemu/raw/v8.0.4/pc-bios/opensbi-riscv32-generic-fw_dynamic.bin
