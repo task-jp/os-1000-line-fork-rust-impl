@@ -36,7 +36,6 @@ RUN ./configure --prefix=/opt/riscv32 --with-arch=rv32i --with-abi=ilp32 && \
 ENV PATH="/opt/riscv32/bin:${PATH}"
 
 # Rust
-RUN apt install -y cargo
 RUN curl https://sh.rustup.rs -sSf | sh && \
     source "$HOME/.cargo/env" && \
     rustup default nightly && \
