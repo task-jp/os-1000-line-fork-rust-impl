@@ -39,7 +39,7 @@ ENV PATH="/opt/riscv32/bin:${PATH}"
 RUN curl https://sh.rustup.rs -sSf | sh && \
     source "$HOME/.cargo/env" && \
     rustup default nightly && \
-    rustup target add riscv32imac-unknown-none-elf && \
+    rustup target add riscv32i-unknown-none-elf && \
     cargo install cargo-binutils && \
     rustup component add llvm-tools-preview
 
