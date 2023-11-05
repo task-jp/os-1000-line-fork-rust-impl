@@ -7,7 +7,9 @@ use core::fmt::Write;
 mod common;
 
 #[panic_handler]
-fn panic(_info: &PanicInfo) -> ! {
+fn panic(info: &PanicInfo) -> ! {
+    let mut console = common::Console::new();
+    writeln!(&mut console, "Panic: {}", info);
     loop {}
 }
 
@@ -26,6 +28,7 @@ fn kernel_main() {
     writeln!(&mut console, "Hello, world!");
     writeln!(&mut console, "1 + 2 = {}", 1 + 2);
 
+    panic!("panic test");
     loop {}
 }
 
