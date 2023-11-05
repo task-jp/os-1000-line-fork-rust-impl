@@ -1,6 +1,83 @@
 use core::arch::asm;
 use core::fmt::Write;
 
+pub type PAddrT = usize;
+pub type VAddrT = usize;
+
+// __builtin_align_up equivalent
+pub fn align_up(addr: usize, align: usize) -> usize {
+    (addr + align - 1) & !(align - 1)
+}
+// __builtin_is_aligned equivalent
+pub fn is_aligned(addr: usize, align: usize) -> bool {
+    addr & (align - 1) == 0
+}
+// __builtin_offsetof equivalent
+pub fn offset_of<T>(field: usize) -> usize {
+    todo!();
+}
+
+pub fn memset(buf: *mut u8, c: u8, n: usize) -> *mut u8 {
+    let mut p = buf;
+    for _ in 0..n {
+        unsafe {
+            *p = c;
+            p = p.add(1);
+        }
+    }
+    buf
+}
+
+pub fn memcpy(dst: *mut u8, src: *const u8, n: usize) -> *mut u8 {
+    let mut d = dst;
+    let mut s = src;
+    for _ in 0..n {
+        unsafe {
+            *d = *s;
+            d = d.add(1);
+            s = s.add(1);
+        }
+    }
+    dst
+}
+
+pub fn strcpy(dst: *mut u8, src: *const u8) -> *mut u8 {
+    let mut d = dst;
+    let mut s = src;
+    loop {
+        unsafe {
+            *d = *s;
+            if *s == 0 {
+                *d = b'\0';
+                break;
+            }
+            d = d.add(1);
+            s = s.add(1);
+        }
+    }
+    dst
+}
+
+pub fn strcmp(s1: *const u8, s2: *const u8) -> i32 {
+    let mut p1 = s1;
+    let mut p2 = s2;
+    loop {
+        unsafe {
+            if *p1 == 0 && *p2 == 0 {
+                return 0;
+            }
+            if *p1 < *p2 {
+                return -1;
+            }
+            if *p1 > *p2 {
+                return 1;
+            }
+            p1 = p1.add(1);
+            p2 = p2.add(1);
+        }
+    }
+}
+
 pub struct Console {}
 
 impl Console {

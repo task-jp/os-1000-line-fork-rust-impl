@@ -17,20 +17,10 @@ extern "C" {
     static __stack_top: u8;
 }
 
-fn memset(buf: *mut u8, c: u8, n: usize) {
-    let mut p = buf;
-    for _ in 0..n {
-        unsafe {
-            *p = c;
-            p = p.add(1);
-        }
-    }
-}
-
 #[allow(dead_code)]
 fn kernel_main() {
     let bss_size = unsafe { &__bss_end as *const _ as usize - &__bss as *const _ as usize };
-    unsafe { memset(&__bss as *const _ as *mut _, 0, bss_size) };
+    unsafe { common::memset(&__bss as *const _ as *mut _, 0, bss_size) };
 
     let mut console = common::Console::new();
     writeln!(&mut console, "Hello, world!");
